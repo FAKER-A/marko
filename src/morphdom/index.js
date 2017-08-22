@@ -5,6 +5,7 @@ var existingComponentLookup = componentsUtil.___componentLookup;
 var destroyComponentForNode = componentsUtil.___destroyComponentForNode;
 var destroyElRecursive = componentsUtil.___destroyElRecursive;
 var morphAttrs = require('../runtime/vdom/VElement').___morphAttrs;
+var eventDelegation = require('../components/event-delegation');
 
 var ELEMENT_NODE = 1;
 var TEXT_NODE = 3;
@@ -25,14 +26,22 @@ function getElementById(doc, id) {
     return doc.getElementById(id);
 }
 
+function onBeforeNodeDiscarded(node) {
+    return eventDelegation.___handleNodeDetach(node);
+}
+
+function onNodeAdded(node, globalComponentsContext) {
+    if (node.nodeType === 1) {
+        eventDelegation.___handleNodeAttach(node, globalComponentsContext.___out);
+    }
+}
+
 function morphdom(
         startNode,
         endNode,
         toNode,
         doc,
-        context,
-        onNodeAdded,
-        onBeforeNodeDiscarded
+        context
     ) {
 
     var removalList = [];
@@ -180,7 +189,7 @@ function morphdom(
 
                                 isComponentPaired = true;
                             } else {
-                                if (fromComponent.___startNode !== curFromNodeChild) {
+                                if (fromComponent.___startNode === curFromNodeChild) {
                                     curFromNodeChild = fromComponent.___endNode.nextSibling;
                                 }
 
