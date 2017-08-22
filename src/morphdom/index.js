@@ -343,7 +343,7 @@ function morphdom(
                             // that is bound to the comment node (if any)
                             isCompatible = curFromNodeChild.nodeValue === curToNodeChild.___nodeValue;
                         }
-                    }
+                    } // END: while (curFromNodeChild)
 
                     if (isCompatible === true) {
                         // Advance both the "to" child and the "from" child since we found a match
@@ -368,7 +368,7 @@ function morphdom(
                     fromEl.appendChild(matchingFromEl);
                     morphEl(matchingFromEl, curToNodeChild, false);
                 } else {
-                    insertVirtualNodeBefore(curToNodeChild, fromNextSibling, fromEl);
+                    insertVirtualNodeBefore(curToNodeChild, null, fromEl);
                 }
 
                 curToNodeChild = toNextSibling;
