@@ -263,7 +263,7 @@ class HtmlElementVDOM extends Node {
 
         let properties = this.properties;
 
-        if (properties.type === 'Literal' && Object.keys(properties.value).length === 0) {
+        if (this.properties && properties.type === 'Literal' && Object.keys(properties.value).length === 0) {
             properties = null;
         }
         if (properties) {
@@ -319,7 +319,12 @@ class HtmlElementVDOM extends Node {
 
     finalizeProperties(context) {
         if (this.properties.type === 'Literal' && isStaticProperties(this.properties.value)) {
-            this.properties = context.addStaticVar('props', this.properties);
+            if (Object.keys(this.properties.value).length === 0) {
+                this.properties = null;
+            } else {
+                this.properties = context.addStaticVar('props', this.properties);
+            }
+
         }
     }
 }
