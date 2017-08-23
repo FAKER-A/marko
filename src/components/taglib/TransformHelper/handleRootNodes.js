@@ -219,6 +219,9 @@ module.exports = function handleRootNodes() {
 
                 walker.skip();
                 return;
+            } else if (node.type === 'Scriptlet') {
+                walker.skip();
+                return;
             } else {
                 if (tagName === 'class') {
                     let classComponentModule = handleClassDeclaration(node, transformHelper);
