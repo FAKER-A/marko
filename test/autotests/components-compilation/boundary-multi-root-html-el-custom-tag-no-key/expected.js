@@ -31,7 +31,7 @@ function render(input, out, __component, component, state) {
     __component.id +
     "-->");
 
-  __component.boundary = [
+  __component.___boundary = [
       "#" + marko_componentBoundaryStartId
     ];
 }

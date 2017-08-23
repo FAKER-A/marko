@@ -27,7 +27,7 @@ function render(input, out, __component, component, state) {
     marko_attr("id", marko_componentBoundaryEndId) +
     "></div>");
 
-  __component.boundary = [
+  __component.___boundary = [
       "#" + marko_componentBoundaryStartId,
       "#" + marko_componentBoundaryEndId
     ];

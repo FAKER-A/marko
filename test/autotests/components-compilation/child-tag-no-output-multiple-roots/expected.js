@@ -34,7 +34,7 @@ function render(input, out, __component, component, state) {
     marko_escapeXml(input.address) +
     "</div>");
 
-  __component.boundary = marko_componentBoundary;
+  __component.___boundary = marko_componentBoundary;
 }
 
 marko_template._ = marko_renderer(render, {

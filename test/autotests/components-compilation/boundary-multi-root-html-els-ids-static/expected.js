@@ -19,7 +19,7 @@ function render(input, out, __component, component, state) {
 
   out.w("<h1 id=\"myStart\"></h1><div id=\"myEnd\"></div>");
 
-  __component.boundary = marko_componentBoundary;
+  __component.___boundary = marko_componentBoundary;
 }
 
 marko_template._ = marko_renderer(render, {
