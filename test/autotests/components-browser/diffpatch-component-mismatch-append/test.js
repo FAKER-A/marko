@@ -7,15 +7,15 @@ module.exports = function(helpers) {
 
     children = component.getEl('root').children;
     expect(children.length).to.equal(2);
-    expect(children[0].innerHTML).to.equal('foo b1-a');
-    expect(children[1].innerHTML).to.equal('bar b1-b');
+    expect(children[0].innerHTML).to.equal('foo-a');
+    expect(children[1].innerHTML).to.equal('bar-b');
 
     component.state.count++;
     component.update();
 
     children = component.getEl('root').children;
     expect(children.length).to.equal(3);
-    expect(children[0].innerHTML).to.equal('foo b1-a');
-    expect(children[1].innerHTML).to.equal('foo b1-b');
-    expect(children[2].innerHTML).to.equal('bar b1-c');
+    expect(children[0].innerHTML).to.equal('foo-a');
+    expect(children[1].innerHTML).to.equal('foo-b');
+    expect(children[2].innerHTML).to.equal('bar-c');
 };

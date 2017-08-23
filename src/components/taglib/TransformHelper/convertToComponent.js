@@ -88,13 +88,30 @@ function getBoundaryForNode(node, pos, builder, isVDOM) {
     };
 }
 
+function checkIsDocumentRoot(rootNodes) {
+    for (var i=0; i<rootNodes.length; i++) {
+        var node = rootNodes[i];
+        if (node.type === 'DocumentType') {
+            return true;
+        } else if (node.type === 'HtmlElement' && node.tagName === 'html') {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 function insertBoundaryNodes(rootNodes, context, builder) {
     let firstNode = rootNodes[0];
     let isDynamic = false;
     let startBoundary;
     let isVDOM = context.outputType === 'vdom';
+    const isDocumentRoot = checkIsDocumentRoot(rootNodes);
+    const isSingleRoot = isDocumentRoot || rootNodes.length === 1;
 
-    if (firstNode.type === 'HtmlElement') {
+    if (isDocumentRoot) {
+        startBoundary = { expression: builder.literal('d') };
+    } else if (firstNode.type === 'HtmlElement') {
         startBoundary = getBoundaryForNode(firstNode, START, builder, isVDOM);
         isDynamic = startBoundary.isDynamic;
         firstNode.addRuntimeFlag(FLAG_COMPONENT_START_NODE);
@@ -112,12 +129,14 @@ function insertBoundaryNodes(rootNodes, context, builder) {
     firstNode.setFlag('hasComponentBind');
 
     let lastNode = rootNodes[rootNodes.length - 1];
-    let isSingleRoot = rootNodes.length === 1;
+
 
     let endBoundary;
     let boundaryNode;
 
-    if (isSingleRoot && startBoundary) {
+    if (isDocumentRoot) {
+        boundaryNode = startBoundary.expression;
+    } else if (isSingleRoot && startBoundary) {
         // The first node is also the end boundary node. We need this information
         // at runtime during DOM diffing/patching to efficiently diff components
         firstNode.addRuntimeFlag(FLAG_COMPONENT_END_NODE);
@@ -184,7 +203,7 @@ module.exports = function handleComponentBind(options) {
     let componentProps = options.componentProps || {};
     let rootNodes = options.rootNodes;
 
-    // console.log('ROOT NODES:', JSON.stringify(rootNodes, null, 4));
+
 
     insertBoundaryNodes(rootNodes, context, builder);
 

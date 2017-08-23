@@ -59,8 +59,15 @@ function resolveBoundaryNode(componentId, target, doc, prefix) {
         var type = target[0];
         var targetId = target.substring(1);
 
-        if (type === '@') {
-            targetId = targetId ? componentId + '-' + targetId : componentId;
+        switch(type) {
+            case '@': {
+                targetId = targetId ? componentId + '-' + targetId : componentId;
+                break;
+            }
+            case 'd': {
+                return doc.documentElement;
+            }
+
         }
 
         return doc.getElementById(targetId);

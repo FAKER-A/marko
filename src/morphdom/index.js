@@ -243,7 +243,9 @@ function morphdom(
                     if (childrenOnly === true && curFromNodeChild === endNode) {
                         break;
                     }
-                    if (!isComponentPaired && (fromComponent = curFromNodeChild._c)) {
+                    if (!isComponentPaired &&
+                        (fromComponent = curFromNodeChild._c) &&
+                        fromComponent.___startNode !== doc.documentElement) {
                         // The current "to" element is not associated with a component,
                         // but the current "from" element is associated with a component
 
@@ -365,10 +367,10 @@ function morphdom(
                 // nodes. Therefore, we will just append the current "to" node
                 // to the end
                 if (curToNodeKey && (matchingFromEl = getElementById(doc, curToNodeKey)) && compareNodeNames(matchingFromEl, curToNodeChild)) {
-                    fromEl.appendChild(matchingFromEl);
+                    fromEl.insertBefore(matchingFromEl, curFromNodeChild);
                     morphEl(matchingFromEl, curToNodeChild, false);
                 } else {
-                    insertVirtualNodeBefore(curToNodeChild, null, fromEl);
+                    insertVirtualNodeBefore(curToNodeChild, curFromNodeChild, fromEl);
                 }
 
                 curToNodeChild = toNextSibling;
