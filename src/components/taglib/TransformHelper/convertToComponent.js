@@ -202,10 +202,13 @@ module.exports = function handleComponentBind(options) {
     let rendererModule = options.rendererModule;
     let componentProps = options.componentProps || {};
     let rootNodes = options.rootNodes;
+    let isLegacyInnerBind = options.isLegacyInnerBind;
 
 
+    if (!isLegacyInnerBind) {
+        insertBoundaryNodes(rootNodes, context, builder);
+    }
 
-    insertBoundaryNodes(rootNodes, context, builder);
 
     var isSplit = false;
 
@@ -231,6 +234,21 @@ module.exports = function handleComponentBind(options) {
             generateRegisterComponentCode(componentModule, this, isSplit));
 
         componentProps.type = componentTypeNode;
+    }
+
+    if (isLegacyInnerBind) {
+        let el = rootNodes[0];
+        el.setAttributeValue('id',
+            builder.memberExpression(
+                builder.identifier('__component'),
+                builder.identifier('id')));
+
+        // TODO Deprecation warning for inner binds
+        let componentNode = context.createNodeForEl('_component', {
+            props: builder.literal(componentProps)
+        });
+        el.wrapWith(componentNode);
+        return;
     }
 
     let markoComponentVar;

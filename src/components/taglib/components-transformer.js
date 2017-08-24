@@ -27,6 +27,10 @@ module.exports = function transform(el, context) {
         let builder = context.builder;
         let bodyValue = el.getAttributeValue('w-body');
         el.removeAttribute('w-body');
+        el.addAttribute({
+            name: 'no-update-body-if',
+            argument: '!__component.b'//builder.negate(builder.memberExpression(builder.identifier('__component'), builder.identifier('b')))
+        });
 
         let includeNode = context.createNodeForEl('include');
 
@@ -44,11 +48,6 @@ module.exports = function transform(el, context) {
 
     if (el.tagName === 'widget-types') {
         context.setFlag('hasWidgetTypes');
-    } else if (el.tagName === 'include') {
-        transformHelper.handleComponentEvents();
-        transformHelper.handleIncludeNode(el);
-        transformHelper.getComponentArgs().compile(transformHelper);
-        return;
     }
 
     if (el.hasAttribute('w-el-id')) {

@@ -120,7 +120,7 @@ module.exports = function handleLegacyBind() {
         return;
     }
 
-    let isInnerBind = checkIsInnerBind(el.parentNode);
+    let isLegacyInnerBind = checkIsInnerBind(el.parentNode);
 
     el.data.hasBoundComponent = true;
 
@@ -145,34 +145,8 @@ module.exports = function handleLegacyBind() {
         componentProps.id = id;
     }
 
-    let markoComponentVar;
-
-    if (rendererModule) {
-        if (rendererModule.inlineId) {
-            markoComponentVar = rendererModule.inlineId;
-        } else {
-            markoComponentVar = context.addStaticVar(
-                'marko_component',
-                builder.require(
-                    builder.literal(rendererModule.requirePath)));
-        }
-    }
-
-    if (isInnerBind) {
-        el.setAttributeValue('id',
-            builder.memberExpression(
-                builder.identifier('__component'),
-                builder.identifier('id')));
-
-        // TODO Deprecation warning for inner binds
-        let componentNode = context.createNodeForEl('_component', {
-            props: builder.literal(componentProps)
-        });
-        el.wrapWith(componentNode);
-        return;
-    }
-
     this.convertToComponent({
+      isLegacyInnerBind,
       componentModule,
       rendererModule,
       isLegacyComponent: true,

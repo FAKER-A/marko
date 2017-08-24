@@ -127,7 +127,6 @@ class TransformHelper {
 TransformHelper.prototype.assignComponentId = require('./assignComponentId');
 TransformHelper.prototype.convertToComponent = require('./convertToComponent');
 TransformHelper.prototype.handleRootNodes = require('./handleRootNodes');
-TransformHelper.prototype.handleIncludeNode = require('./handleIncludeNode');
 TransformHelper.prototype.handleComponentEvents = require('./handleComponentEvents');
 TransformHelper.prototype.handleComponentPreserve = require('./handleComponentPreserve');
 TransformHelper.prototype.handleComponentPreserveAttrs = require('./handleComponentPreserveAttrs');
